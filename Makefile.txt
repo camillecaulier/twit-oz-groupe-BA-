@@ -1,0 +1,7 @@
+CC=/Applications/Mozart2.app/Contents/Resources/bin/ozc
+EXEC=/Applications/Mozart2.app/Contents/Resources/bin/ozengine
+
+all: Algo.ozf 
+	$(EXEC) Algo.ozf 
+Algo.ozf: Algo.oz 
+	$(CC) -c Algo.oz > Algo.ozf 
