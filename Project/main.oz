@@ -49,4 +49,6 @@ define
    {Show {Algo.updateWord D 'hello' 'world'}}
    {Show {Algo.reachMostProb D 'Hello'}}
    {Show {Algo.reachMostProb D 'hello'}}
+   %{Browse {GetFirstLine "tweets/part_t.txt"}}
+   
 end
