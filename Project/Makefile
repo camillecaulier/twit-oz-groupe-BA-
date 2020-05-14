@@ -6,8 +6,8 @@ all : main.oza
 main.oza : main.oz Reader.ozf Algo.ozf
 	ozc -c main.oz -o main.oza
 
-#maintemp.oza : maintemp.oz Reader.ozf Algo.ozf
-	#ozc -c maintemp.oz -o maintemp.oza
+maintemp.oza : maintemp.oz Reader.ozf Algo.ozf
+	ozc -c maintemp.oz -o maintemp.oza
 
 %.ozf : %.oz
 	ozc -c $< -o $@
@@ -15,7 +15,7 @@ main.oza : main.oz Reader.ozf Algo.ozf
 run : main.oza
 	ozengine main.oza
 
-#runtemp : maintemp.oza
-	#ozengine maintemp.oza
+runtemp : maintemp.oza
+	ozengine maintemp.oza
 clean :
 	rm -f *.oza *.ozf

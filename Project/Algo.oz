@@ -33,13 +33,12 @@ define
    % @post: -if 'Word' is not already in 'Dico', we initialized it and then we add 'W' in its followers with a count of 1.
    %        -if 'Word' is already in 'Dico' but 'W' isn't already in its followers, we add 'W' with a count of 1.
    %        -if 'Word' is already in 'Dico' and 'W' is already in its followers, we increase by 1 the count of 'W'.
-   fun {UpdateWord Dico Word W}
+   proc{UpdateWord Dico Word W}
       local
-	 fun {IncCountW D W}
+	 proc {IncCountW D W}
 	    local C Old in
 	       {Dictionary.get D W C}
 	       {Dictionary.exchange D W Old (C+1)}
-	       'Already a key, already a word'
 	    end
 	 end
       in
@@ -51,14 +50,12 @@ define
 	       then {IncCountW D W}
 	       else
 		  {Dictionary.put D W 1}
-		  'Already a key, new word'
 	       end
 	    end
 	 else
 	   local D in
 	      {Dictionary.get Dico Word D}
 	      {Dictionary.put D W 1}
-	      'New key, new word'
 	   end
 	 end
       end

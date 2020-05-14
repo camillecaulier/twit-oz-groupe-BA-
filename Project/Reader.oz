@@ -52,23 +52,23 @@ define
       {Send P1 nil}
       {Send P2 nil}
    end
-    proc{Read_doc File_name Port_1 Port_2}
-       local File Text in
-	  File = {New TextFile init(name:File_name)}
-	  Text = {NewCell nil}
-	  for Line_number in 1..100 do
-	     Text := {File getS($)}
+   proc{Read_doc File_name Port_1 Port_2} %no need for this 
+      local File Text in
+	 File = {New TextFile init(name:File_name)}
+	 Text = {NewCell nil}
+	 for Line_number in 1..100 do
+	    Text := {File getS($)}
 	     
-	     if Line_number mod 2 == 0 then
-		{Send Port_1 @Text}
-	     elseif Line_number mod 2 == 1 then
-		{Send Port_2 @Text}
-	     end
-	  end
-	  {File close}
+	    if Line_number mod 2 == 0 then
+	       {Send Port_1 @Text}
+	    elseif Line_number mod 2 == 1 then
+	       {Send Port_2 @Text}
+	    end
+	 end
+	 {File close}
 	  %{File close} %fermer le fichie
-       end
-    end
+      end
+   end
     
 
 end
