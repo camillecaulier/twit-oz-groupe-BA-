@@ -17,12 +17,12 @@ define
       {Reader.scan {New Reader.textfile init(name:IN_NAME)} 1}
    end
 
-   fun {Create_port Operation Dico}
+   fun {Create_port Operation Dico Number}
       Port Stream
    in
       Port={NewPort Stream}
       thread for Item in Stream do
-		{Operation Dico Item}
+		{Operation Dico Item Number}
 	     end
       end
       Port
@@ -37,30 +37,26 @@ define
       end
       Port
    end
-   %conditions ...
-   %
    
-   % proc{Handle VirtualStr}
-   %    case VirtualStr of nil then skip
-   %    else
-   % 	 local Str in
-   % 	    Str={VirtualString.toString VirtualStr}  %Changer toAtom en toStr pour lire fichier
-   % 	    {SendToDecoupe Str}  %appeler méthode
-   % 	 end
-   %    end
-   % end
-   %lectrue -> port 1(parsea) -> dictionaire
+%lectrue -> port 1(parsea) -> dictionaire   
    N_diagramme = {Dictionary.new}
-   Port_1={Create_port Algo.parse N_diagramme}
-   Port_2={Create_port Algo.parse N_diagramme}
-   % Port_1={Create_port_pro Show}
-   % Port_2 = {Create_port_pro Show}
-   
-   % proc{SendToDecoupe Str}
-   %    {Reader.read_doc Str P3 P4}
+   Count= {NewCell 0}
+   Port_1 = {Create_port Algo.parse N_diagramme Count}
+   Port_2 = {Create_port Algo.parse N_diagramme Count}
+   Port_3 = {Create_port Algo.parse N_diagramme Count}
+   Port_4 = {Create_port Algo.parse N_diagramme Count}
+
+   % Testcell = {NewCell nil}
+   % proc{Nothing H}
+   %    Testcell := 0      
    % end
-   {Reader.file_reading Port_1 Port_2}
-   {Browse N_diagramme}
+   % Port_1={Create_port_pro Nothing}
+   % Port_2 = {Create_port_pro Nothing}
+   
+   
+   {Reader.file_reading Port_1 Port_2 Port_3 Port_4}
+
+   %{Browse {Dictionary.entries N_diagramme}}
    
     
 %%% GUI

@@ -133,19 +133,20 @@ define
       end
    end
    
-   proc{Parse Dico Line}
+   proc{Parse Dico Line Count}
       
       Temp_1 Temp_2 Check_first Line_split in
       proc{Line_split Line_list}
-	 %{Show 'hello'}
-	 case Line_list of nil then skip
-	 [] H|T then %nil espace ponctuation"
+	 
+	 case Line_list of nil then
+	    skip
+	 [] H|T then 
 	    if H == 32 then
-	       %{Show 'Fuck  you you bitch'}
+	       
 	       if @Check_first == 2 then %fullsotp then end
 		  Temp_2 := {List.reverse @Temp_2}
 		  Temp_2 := {VirtualString.toAtom @Temp_2}
-		  %{Show @Temp_2}
+		  
 		  {UpdateWord Dico @Temp_1 @Temp_2}
 		  Temp_1 := @Temp_2
 		  Temp_2 := nil
@@ -160,11 +161,10 @@ define
 	       end
 
             %common and plus is a word / and - ' 
-	    elseif H==33 orelse H==46 orelse H==34 orelse H==40 orelse H==41 orelse H==58 orelse H==59 orelse H==63 orelse H == 42 orelse H==60 orelse H== 61 orelse H== 62 orelse H== 96 orelse H==123 orelse H== 124 orelse H== 125 orelse H==126 then
+	    elseif H==33 orelse H==46 orelse H==34 orelse H == 38 orelse H==40 orelse H==41 orelse H==58 orelse H==59 orelse H==63 orelse H == 42 orelse H==60 orelse H== 61 orelse H== 62 orelse H== 96 orelse H==123 orelse H== 124 orelse H== 125 orelse H==126 then
 	       if T ==nil then %si un ponctuation c'est la fin 
 		  Temp_2 := {List.reverse @Temp_2}
 		  Temp_2 := {VirtualString.toAtom @Temp_2}
-		  %{Show @Temp_2}
 		  {UpdateWord Dico @Temp_1 @Temp_2}
 	       else
 		  {Line_split T}
@@ -176,7 +176,6 @@ define
 		  if T ==nil then %quand on arrive a la fin 
 		     Temp_2 := {List.reverse @Temp_2}
 		     Temp_2 := {VirtualString.toAtom @Temp_2}
-		     %{Show @Temp_2}
 		     {UpdateWord Dico @Temp_1 @Temp_2}
 		  else
 		     {Line_split T}
@@ -193,13 +192,17 @@ define
       Temp_1 = {NewCell nil}
       Temp_2 = {NewCell nil}
       Check_first = {NewCell 0}
-   	 %0 just started	 
-   	 %1 letter first word
-   	 %2 got the first letter of the second word
-   	 %3 just changed
+   	 
       if Line \= false then
-	 {Show {Dictionary.entries Dico}}
 	 {Line_split Line}
+      end
+      
+      if Line == nil then
+	 if @Count == 3 then
+	    {Show 'Parsing complete'}
+	 else
+	    Count := @Count + 1
+	 end		    
       end      
    end
    
