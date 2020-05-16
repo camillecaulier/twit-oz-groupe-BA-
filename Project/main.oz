@@ -17,7 +17,17 @@ define
       {Reader.scan {New Reader.textfile init(name:IN_NAME)} 1}
    end
 
-   fun {NewPortObject0 Operation}
+   fun {Create_port Operation Dico}
+      Port Stream
+   in
+      Port={NewPort Stream}
+      thread for Item in Stream do
+		{Operation Dico Item}
+	     end
+      end
+      Port
+   end
+   fun {Create_port_pro Operation}
       Port Stream
    in
       Port={NewPort Stream}
@@ -27,7 +37,8 @@ define
       end
       Port
    end
-   
+   %conditions ...
+   %
    
    % proc{Handle VirtualStr}
    %    case VirtualStr of nil then skip
@@ -38,13 +49,18 @@ define
    % 	 end
    %    end
    % end
-   Port_1={NewPortObject0 Show}
-   Port_2={NewPortObject0 Show}
-
+   %lectrue -> port 1(parsea) -> dictionaire
+   N_diagramme = {Dictionary.new}
+   Port_1={Create_port Algo.parse N_diagramme}
+   Port_2={Create_port Algo.parse N_diagramme}
+   % Port_1={Create_port_pro Show}
+   % Port_2 = {Create_port_pro Show}
+   
    % proc{SendToDecoupe Str}
    %    {Reader.read_doc Str P3 P4}
    % end
    {Reader.file_reading Port_1 Port_2}
+   {Browse N_diagramme}
    
     
 %%% GUI

@@ -1,4 +1,4 @@
-functor
+functor %alexis
 import
    QTk at 'x-oz://system/wp/QTk.ozf'
    System

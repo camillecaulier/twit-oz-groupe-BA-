@@ -1,9 +1,15 @@
 functor
+import
+   System
+   Application
+   QTk at 'x-oz://system/wp/QTk.ozf'
 export
    updateWord:UpdateWord
    reachMostProb:ReachMostProb
+   parse:Parse
 
 define
+   Show = System.show
 
    
    % Check if Word is a key of Dico.
@@ -53,10 +59,10 @@ define
 	       end
 	    end
 	 else
-	   local D in
-	      {Dictionary.get Dico Word D}
-	      {Dictionary.put D W 1}
-	   end
+	    local D in
+	       {Dictionary.get Dico Word D}
+	       {Dictionary.put D W 1}
+	    end
 	 end
       end
    end
@@ -66,20 +72,20 @@ define
    % @post: Returns a list of smaller lists [key item] from the tuples of L.   
    fun {TuplesToList L}
       local
-   	 fun {NextTuple L I N Ls}
-   	    if (N > I)
-   	    then Ls
+	 fun {NextTuple L I N Ls}
+	    if (N > I)
+	    then Ls
 	    else
 	       local T Ts in
 		  T = {Record.toList {List.nth L N}}
 		  Ts = {List.append Ls [T]}
 		  {NextTuple L I (N+1) Ts}
 	       end
-   	    end
-   	 end
+	    end
+	 end
       in
-   	 local I in
-   	    I = {List.length L}
+	 local I in
+	    I = {List.length L}
 	    {NextTuple L I 1 nil}
 	 end
       end
@@ -92,22 +98,22 @@ define
    %        -if 'Word' wasn't in the analyzed text, returns 'Error: key not found'.
    fun {ReachMostProb Dico Word}
       local
-      	 fun {UpdateMostProb L I N M O}
-      	    if (N > I)
-      	    then M
-      	    else
-      	       local K Nbr in
-      		  Nbr = {List.nth {List.nth L N} 2}
-      		  if (Nbr > O)
-      		  then
-      		     K = {List.nth {List.nth L N} 1}
-      		     {UpdateMostProb L I (N+1) K Nbr}
-      		  else
-      		     {UpdateMostProb L I (N+1) M O}
-      		  end
-      	       end
-      	    end
-      	 end
+	 fun {UpdateMostProb L I N M O}
+	    if (N > I)
+	    then M
+	    else
+	       local K Nbr in
+		  Nbr = {List.nth {List.nth L N} 2}
+		  if (Nbr > O)
+		  then
+		     K = {List.nth {List.nth L N} 1}
+		     {UpdateMostProb L I (N+1) K Nbr}
+		  else
+		     {UpdateMostProb L I (N+1) M O}
+		  end
+	       end
+	    end
+	 end
       in
 	 local D L S in
 	    {Dictionary.condGet Dico Word 'Error: key not found' D}
@@ -126,5 +132,76 @@ define
 	 end
       end
    end
+   
+   proc{Parse Dico Line}
+      
+      Temp_1 Temp_2 Check_first Line_split in
+      proc{Line_split Line_list}
+	 %{Show 'hello'}
+	 case Line_list of nil then skip
+	 [] H|T then %nil espace ponctuation"
+	    if H == 32 then
+	       %{Show 'Fuck  you you bitch'}
+	       if @Check_first == 2 then %fullsotp then end
+		  Temp_2 := {List.reverse @Temp_2}
+		  Temp_2 := {VirtualString.toAtom @Temp_2}
+		  %{Show @Temp_2}
+		  {UpdateWord Dico @Temp_1 @Temp_2}
+		  Temp_1 := @Temp_2
+		  Temp_2 := nil
+		  {Line_split T}
+   		  
+	       else %in  case if it's 1 and 2 so one letter or a word 
+		  Check_first := 2 
+		  Temp_1 := {List.reverse @Temp_1}
+		  Temp_1 := {VirtualString.toAtom @Temp_1}
+		  {Line_split T}
+   		 
+	       end
+
+            %common and plus is a word / and - ' 
+	    elseif H==33 orelse H==46 orelse H==34 orelse H==40 orelse H==41 orelse H==58 orelse H==59 orelse H==63 orelse H == 42 orelse H==60 orelse H== 61 orelse H== 62 orelse H== 96 orelse H==123 orelse H== 124 orelse H== 125 orelse H==126 then
+	       if T ==nil then %si un ponctuation c'est la fin 
+		  Temp_2 := {List.reverse @Temp_2}
+		  Temp_2 := {VirtualString.toAtom @Temp_2}
+		  %{Show @Temp_2}
+		  {UpdateWord Dico @Temp_1 @Temp_2}
+	       else
+		  {Line_split T}
+	       end
+	       
+	    else
+	       if @Check_first == 2 then 
+		  Temp_2 := H|@Temp_2
+		  if T ==nil then %quand on arrive a la fin 
+		     Temp_2 := {List.reverse @Temp_2}
+		     Temp_2 := {VirtualString.toAtom @Temp_2}
+		     %{Show @Temp_2}
+		     {UpdateWord Dico @Temp_1 @Temp_2}
+		  else
+		     {Line_split T}
+		  end		  
+	       else  		  
+		  Temp_1 := H|@Temp_1
+		  {Line_split T}
+   		  
+	       end
+	    end
+	 end    
+      end
+      
+      Temp_1 = {NewCell nil}
+      Temp_2 = {NewCell nil}
+      Check_first = {NewCell 0}
+   	 %0 just started	 
+   	 %1 letter first word
+   	 %2 got the first letter of the second word
+   	 %3 just changed
+      if Line \= false then
+	 {Show {Dictionary.entries Dico}}
+	 {Line_split Line}
+      end      
+   end
+   
    
 end 
