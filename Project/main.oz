@@ -114,7 +114,7 @@ define
    proc {FilterPunctuation Word}
       local LastLetter Length in %to filter out the last letter if it's a punctuation or
 	 LastLetter = {List.last @Word}
-	 if LastLetter == 32 orelse LastLetter ==33 orelse LastLetter==46 orelse LastLetter==34 orelse LastLetter == 38 orelse LastLetter==40 orelse LastLetter==41 orelse LastLetter==58 orelse LastLetter==59 orelse LastLetter==63 orelse LastLetter == 42 orelse LastLetter==60 orelse LastLetter== 61 orelse LastLetter== 62 orelse LastLetter== 96 orelse LastLetter==123 orelse LastLetter== 124 orelse LastLetter== 125 orelse LastLetter==126 then
+	 if LastLetter == 32 orelse LastLetter ==33 orelse LastLetter==46 orelse LastLetter==34 orelse LastLetter == 38 orelse LastLetter==40 orelse LastLetter==41 orelse LastLetter ==44 orelse LastLetter==58 orelse LastLetter==59 orelse LastLetter==63 orelse LastLetter == 42 orelse LastLetter==60 orelse LastLetter== 61 orelse LastLetter== 62 orelse LastLetter== 96 orelse LastLetter==123 orelse LastLetter== 124 orelse LastLetter== 125 orelse LastLetter==126 then
 	    Length = {List.length @Word}
 	    Word := {List.take @Word (Length-1)} 
 	    {FilterPunctuation Word}
@@ -131,6 +131,7 @@ define
       L = {List.take Inserted (N-1)}     
       Line = {String.tokens L 32}
       Word= {NewCell {List.last Line}}
+      {FilterPunctuation Word}
       
       PastWord = {List.last Line} % this is so that we can keep the old form of the line with the punctaution
 
@@ -147,17 +148,21 @@ define
    end
    
    proc{Recommend}
-      Inserted ToInsert N L Prob Line Word in
+      Inserted ToInsert N L Prob Line Word PastWord in
       Inserted ={Text1 getText(p(1 0) 'end' $)}
       N = {List.length Inserted}
       L = {List.take Inserted (N-1)}
       Line = {String.tokens L 32}
-      Word = {List.last Line}
-      Prob = {Algo.reachMostProb N_diagramme {String.toAtom Word}}
+      Word= {NewCell {List.last Line}}
+      {FilterPunctuation Word}
+      
+      PastWord = {List.last Line}
+
+      Prob = {Algo.reachMostProb N_diagramme {String.toAtom @Word}}
       if Prob == nil then
 	 {Text2 set(1:"Donald Trump doesn't use that word really often sorry")}
       else
-	 ToInsert= "Trump's favourite word after "#{String.toAtom Word}#" is: "#Prob
+	 ToInsert= "Trump's favourite word after "#{String.toAtom @Word}#" is: "#Prob
 	 {Text2 set(1:ToInsert)}
       end
       

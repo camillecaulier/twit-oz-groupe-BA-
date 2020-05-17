@@ -185,7 +185,7 @@ define
 	       end
 
             %common and plus is a word / and - ' 
-	    elseif H==33 orelse H==46 orelse H==34 orelse H == 38 orelse H==40 orelse H==41 orelse H==58 orelse H==59 orelse H==63 orelse H == 42 orelse H==60 orelse H== 61 orelse H== 62 orelse H== 96 orelse H==123 orelse H== 124 orelse H== 125 orelse H==126 then
+	    elseif H==33 orelse H==46 orelse H==34 orelse H == 38 orelse H==40 orelse H==41 orelse H==58 orelse H==59 orelse H==63 orelse H == 42 orelse H==60 orelse H== 61 orelse H== 62 orelse H== 96 orelse H==123 orelse H== 124 orelse H== 125 orelse H==126 orelse H==44 then
 	       if T ==nil then %si un ponctuation c'est la fin 
 		  Temp_2 := {List.reverse @Temp_2}
 		  Temp_2 := {VirtualString.toAtom @Temp_2}
