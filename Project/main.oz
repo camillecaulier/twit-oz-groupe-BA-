@@ -74,9 +74,9 @@ define
    end
    
    
-   %lecture -> port -> dictionary   
-   N_diagramme = {Dictionary.new}
-   Count= {NewCell 0}
+    
+   N_diagramme = {Dictionary.new} %dictionary to put all the N diagram analysis in
+   Count= {NewCell 0}             %variable to know when the streams have been completed
    
    
    
@@ -86,54 +86,92 @@ define
    Port_3 = {CreatePortParse Algo.parse N_diagramme Count}
    Port_4 = {CreatePortParse Algo.parse N_diagramme Count}
 
-   % Port_1 = {CreatePortPro Show}
-   % Port_2 = {CreatePortPro Show}
-   % Port_3 = {CreatePortPro Show}
-   % Port_4 = {CreatePortPro Show}
+   
 
-   % Port_1_reading = {CreatePortRead Reader.file_reading 0 Port_1 Port_2 Port_3 Port_4} %will read files 1->52
-   % Port_2_reading = {CreatePortRead Reader.file_reading 1 Port_1 Port_2 Port_3 Port_4} %will read files 53->104
-   % Port_3_reading = {CreatePortRead Reader.file_reading 2 Port_1 Port_2 Port_3 Port_4} %will read files 105->156
-   % Port_4_reading = {CreatePortRead Reader.file_reading 3 Port_1 Port_2 Port_3 Port_4} %will read files 157->208
-
-   thread{Reader.file_reading 1 Port_1}end
-   thread{Reader.file_reading 2 Port_2}end
-   thread{Reader.file_reading 3 Port_3}end
-   thread{Reader.file_reading 4 Port_4}end
+   thread{Reader.file_reading 1 Port_1}end %will read files 1->52
+   thread{Reader.file_reading 2 Port_2}end %will read files 53->104
+   thread{Reader.file_reading 3 Port_3}end %will read files 105->156
+   thread{Reader.file_reading 4 Port_4}end %will read files 157->208
    
    
     
 %%% GUI
     % Make the window description, all the parameters are explained here:
     % http://mozart2.org/mozart-v1/doc-1.4.0/mozart-stdlib/wp/qtk/html/node7.html)
-   Text1 Description=td(
+   Text1 Text2 Description=td(
 			      title: "Frequency count"
 			      lr(
 				 text(handle:Text1 width:28 height:5 background:white foreground:black wrap:word)
-				 button(text:"Word recommendation" action:Press)
+				 button(text:"Automatic fill" action:AutomaticFill)
+				 button(text:"recommendation" action:Recommend)
+				 button(text:"exit" action:Exit)
+				 
 				 )
-			     
+			      text(handle:Text2 width:28 height:5 background:black foreground:white glue:w wrap:word)
 			      action:proc{$}{Application.exit 0} end % quit app gracefully on window closing
+			      
 			      )
-   proc {Press} Inserted ToInsert N L Prob Line Word in
-      Inserted ={Text1 getText(p(1 0) 'end' $)} % example using coordinates to get text
+   proc {FilterPunctuation Word}
+      local LastLetter Length in %to filter out the last letter if it's a punctuation or
+	 LastLetter = {List.last @Word}
+	 if LastLetter == 32 orelse LastLetter ==33 orelse LastLetter==46 orelse LastLetter==34 orelse LastLetter == 38 orelse LastLetter==40 orelse LastLetter==41 orelse LastLetter==58 orelse LastLetter==59 orelse LastLetter==63 orelse LastLetter == 42 orelse LastLetter==60 orelse LastLetter== 61 orelse LastLetter== 62 orelse LastLetter== 96 orelse LastLetter==123 orelse LastLetter== 124 orelse LastLetter== 125 orelse LastLetter==126 then
+	    Length = {List.length @Word}
+	    Word := {List.take @Word (Length-1)} 
+	    {FilterPunctuation Word}
+	 end
+      end
+   end
+   
+	 
+      
+   proc {AutomaticFill} Inserted ToInsert N L Prob Line Word PastWord in
+
+      Inserted ={Text1 getText(p(1 0) 'end' $)} 
+      N = {List.length Inserted}
+      L = {List.take Inserted (N-1)}     
+      Line = {String.tokens L 32}
+      Word= {NewCell {List.last Line}}
+      
+      PastWord = {List.last Line} % this is so that we can keep the old form of the line with the punctaution
+
+      Prob = {Algo.reachMostProb N_diagramme {String.toAtom @Word}}
+      
+      if Prob == nil then
+	 {Text2 set(1:"Donald Trump doesn't use that word really often sorry or you have misspelled the word")}
+      else
+	 ToInsert = ' '#Prob
+	 
+	 
+	 {Text1 tk(insert 'end' ToInsert)}
+      end
+   end
+   
+   proc{Recommend}
+      Inserted ToInsert N L Prob Line Word in
+      Inserted ={Text1 getText(p(1 0) 'end' $)}
       N = {List.length Inserted}
       L = {List.take Inserted (N-1)}
-      %{Show {String.toAtom Inserted}}
       Line = {String.tokens L 32}
       Word = {List.last Line}
       Prob = {Algo.reachMostProb N_diagramme {String.toAtom Word}}
-      ToInsert= {List.append L {List.append 32|nil Prob}}
+      if Prob == nil then
+	 {Text2 set(1:"Donald Trump doesn't use that word really often sorry")}
+      else
+	 ToInsert= "Trump's favourite word after "#{String.toAtom Word}#" is: "#Prob
+	 {Text2 set(1:ToInsert)}
+      end
       
-      {Text1 set(1:ToInsert)} % you can get/set text this way too
    end
-    % Build the layout from the description 
+   proc{Exit}
+      {Application.exit 0}
+   end
+   
    W={QTk.build Description}
    {W show}
 
-   {Text1 tk(insert 'end' 'hello phone')}
-   {Text1 bind(event:"<Control-s>" action:Press)} % You can also bind events
+   
+   {Text1 bind(event:"<Control-s>" action:AutomaticFill)} % You can also bind events
 
-   %{Show 'You can print in the terminal...'}
-   %{Browse '... or use the browser window'}
+   {Show 'You can print in the terminal...'}
+
 end

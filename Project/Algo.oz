@@ -115,7 +115,7 @@ define
 	 end
       in
 	 local D L S in
-	    {Dictionary.condGet Dico Word 'Error: key not found' D}
+	    {Dictionary.condGet Dico Word nil D}
 	    if {Dictionary.is D}
 	    then
 	       L = {Dictionary.entries D}
@@ -144,6 +144,7 @@ define
    %
    %@post:
    %    Dico: The dictionary will have stored the relevant information obtained by the parsing to store in the dictionary.
+   %    The stored value will be in VirtualString.
    %
    %    Line: nothing changes to this list of Atoms.
    %

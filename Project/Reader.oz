@@ -31,8 +31,13 @@ define
    class TextFile % This class enables line-by-line reading
       from Open.file Open.text
    end
-   %procedure that will send the lines(where each 
+   %procedure that will send the lines of a file to the the respective port to be parsed
    %
+   %@pre:
+   %     PortNumber: A number that will allow use which fiels to assign. We have 208 files and these
+   %     files will be divided into 4 batches equally.
+   %
+   %     Port: Port to where we will send the lines of the files to.
    proc{File_reading PortNumber Port}
       local FirstFileNumber LastFileNumber in
 	 LastFileNumber = PortNumber * 52
