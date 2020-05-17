@@ -1,4 +1,4 @@
-functor%Alexis  
+functor
 import
    Open
    System
