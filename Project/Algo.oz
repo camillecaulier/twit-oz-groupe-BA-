@@ -200,7 +200,6 @@ define
       if Line == nil then
 	 if @Count == 3 then
 	    {Show 'Parsing complete'}
-	    {Show {ReachMostProb Dico 'to'}}
 	 else
 	    Count := @Count + 1
 	 end		    
