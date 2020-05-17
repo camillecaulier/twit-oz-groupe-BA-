@@ -1,5 +1,5 @@
 # Introduction
-Ce projet a été réalisé par le groupe BA constitué de Camille Caulier et de Philippine de Suraÿ dans le cadre du cours LINFO1104. Le projet intitulé Twit-oz a pour objectif de réaliser un code en Oz permettant la prédiction de mots sur base des tweets de Donald Trump et en utilisant le modèle du N-gramme. Ici, nous nous sommes limités à 1-gramme pour limiter l'usage de la mémoire et obtenir un code plus rapide.
+Ce projet a été réalisé par le groupe BA constitué de Camille Caulier et de Philippine de Suraÿ dans le cadre du cours LINFO1104. Le projet intitulé Twit'oz a pour objectif de réaliser un code en Oz permettant la prédiction de mots sur base des tweets de Donald Trump et en utilisant le modèle du N-gramme. Ici, nous nous sommes limités à 1-gramme pour limiter l'usage de la mémoire et obtenir un code plus rapide.
 
 Vous trouverez dans ce README la structure détaillée des fichiers du travail, ainsi que la marche à suivre afin de compiler le code depuis Windows.
 
