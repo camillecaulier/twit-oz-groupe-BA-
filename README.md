@@ -17,7 +17,7 @@ Concernant l'interface graphique et GUI, la fenêtre contient deux zones de text
 L'utilisateur peut donc écrire son texte dans le première zone et cliquer sur le bouton de son choix en fonction de son souhait. Le programme s'ajuste aux ponctuations et prend le mot en les supprimant pour définir le prochain.
 
 ## Reader.oz
-Le fichier Reader.oz permet de lire les tweets contenus dans le dossier tweets. La procédure File_reading réparti équitablement les 208 fichiers dans 4 streams (Port) et va séparer les différents tweets entre eux pour permettre une lecture en parallèle des tweets de Donald Trump.
+Le fichier Reader.oz permet de lire les tweets contenus dans le dossier tweets. La procédure File_reading va faire la lecture de 52 fichiers parmis les 208 fichiers en fonction de la variable PortNumber donnée pour permettre une lecture en parallèle des tweets de Donald Trump et va séparer les différents tweets entre eux. Elle va ensuite envoyer les différents tweets à leurs Ports (donnés en variable).
 
 ## Algo.oz
 Le fichier Algo.oz contient les parties du programme à propos du parsing, de la sauvegarde et du N-gramme. 
