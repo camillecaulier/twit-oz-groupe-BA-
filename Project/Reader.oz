@@ -31,34 +31,30 @@ define
    class TextFile % This class enables line-by-line reading
       from Open.file Open.text
    end
-   proc{File_reading P1 P2 P3 P4}
-      for I in 1..208 do
-	 local File_name File in
-	    File_name="tweets/part_"#{Int.toString I}#".txt"
-	    %{Show File_name}
-	    File = {New TextFile init(name:File_name)}
-	    for J in 1..100 do
-	       local Line in
-		  Line = {File getS($)}
-		  if J mod 4 == 0 then
-		     {Send P1 Line}
-		  elseif J mod 4 == 1 then
-		     {Send P2 Line}
-		  elseif J mod 4 == 2 then
-		     {Send P3 Line}
-		  else
-		     {Send P4 Line}
+   %procedure that will send the lines(where each 
+   %
+   proc{File_reading PortNumber Port}
+      local FirstFileNumber LastFileNumber in
+	 LastFileNumber = PortNumber * 52
+	 FirstFileNumber = LastFileNumber - 51 
+	 
+	 for I in FirstFileNumber..LastFileNumber do
+	    local File_name File in
+	       File_name="tweets/part_"#{Int.toString I}#".txt"
+	       File = {New TextFile init(name:File_name)}
+	       for J in 1..100 do
+		  local Line in
+		     Line = {File getS($)}
+		     {Send Port Line}
 		  end
 	       end
+	       {File close}
 	    end
-	    {File close}
 	 end
+	 {Send Port nil}
       end
-      {Send P1 nil}
-      {Send P2 nil}
-      {Send P3 nil}
-      {Send P4 nil}
    end
+   
     
 
 end

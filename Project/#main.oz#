@@ -96,10 +96,10 @@ define
    % Port_3_reading = {CreatePortRead Reader.file_reading 2 Port_1 Port_2 Port_3 Port_4} %will read files 105->156
    % Port_4_reading = {CreatePortRead Reader.file_reading 3 Port_1 Port_2 Port_3 Port_4} %will read files 157->208
 
-   thread{Reader.file_reading 1 Port_1}end
-   thread{Reader.file_reading 2 Port_2}end
-   thread{Reader.file_reading 3 Port_3}end
-   thread{Reader.file_reading 4 Port_4}end
+   thread{Reader.file_reading 1 Port_1}end %will read files 1->52
+   thread{Reader.file_reading 2 Port_2}end %will read files 53->104
+   thread{Reader.file_reading 3 Port_3}end %will read files 105->156
+   thread{Reader.file_reading 4 Port_4}end %will read files 157->208
    
    
     

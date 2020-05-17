@@ -83,8 +83,7 @@ define
 	       end
 	    end
 	 end
-      in
-	 local I in
+      in	 local I in
 	    I = {List.length L}
 	    {NextTuple L I 1 nil}
 	 end
@@ -132,6 +131,30 @@ define
 	 end
       end
    end
+
+   %This function is used in the stream created by the function "createPort"
+   %
+   %@pre:
+   %    Dico: Dico is a dictionary where we will store the N diagram analysis in.
+   %
+   %    Line: Line is in reality a tweet in Atom that has been stored in the stream. We will do an N diagram analysis on it
+   %    if Line is equal to nil then that means we have reached the end of the stream and thus Count will augment by one.
+   %
+   %    Count: Stores the quantities of streams that have been completed.
+   %
+   %@post:
+   %    Dico: The dictionary will have stored the relevant information obtained by the parsing to store in the dictionary.
+   %
+   %    Line: nothing changes to this list of Atoms.
+   %
+   %    Count:Once the stream is completed it will augment by one. If this is the last stream to be completed then the procedure
+   %    will show in the terminal "parsing completed" in order to inform the user that all four streams have been completed and the
+   %    parsing is completed.
+   %
+   %Conditions:
+   %    In the parsing we considered certain cases in order to keep a clean and comprehensible N diagram analysis. The code will neglect
+   %    punctuations such as ".", ",", ")" etc... but we made exceptions with words with the "-", "/" and "#".  
+   %
    
    proc{Parse Dico Line Count}
       
