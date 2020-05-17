@@ -1,7 +1,3 @@
-#CC=/Applications/Mozart2.app/Contents/Resources/bin/ozc
-#EXEC=/Applications/Mozart2.app/Contents/Resources/bin/ozengine
-
- 
 all : main.oza 
 main.oza : main.oz Reader.ozf Algo.ozf
 	ozc -c main.oz -o main.oza
