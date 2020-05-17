@@ -13,9 +13,7 @@ define
    Show = System.show
 
 %%% Read File
-   fun {GetFirstLine IN_NAME}
-      {Reader.scan {New Reader.textfile init(name:IN_NAME)} 1}
-   end
+   
    
    %This function is used to create a stream
    %
@@ -50,28 +48,7 @@ define
       Port
    end
 
-   fun{CreatePortPro Operation}
-      Port Stream
-   in
-      Port = {NewPort Stream}
-      thread for Item in Stream do
-		{Operation Item}
-	     end
-      end
-      Port
-   end
-   
 
-   fun {CreatePortRead Operation PortNumber Port1 Port2 Port3 Port4}
-      Port Stream
-   in
-      Port = {NewPort Stream}
-      thread for Item in Stream do
-		{Operation PortNumber Port1 Port2 Port3 Port4}
-	     end
-      end
-      Port
-   end
    
    
     
@@ -80,14 +57,14 @@ define
    
    
    
-   
+   %ports to do the parsing
    Port_1 = {CreatePortParse Algo.parse N_diagramme Count}
    Port_2 = {CreatePortParse Algo.parse N_diagramme Count}
    Port_3 = {CreatePortParse Algo.parse N_diagramme Count}
    Port_4 = {CreatePortParse Algo.parse N_diagramme Count}
 
    
-
+   %to read in parallel
    thread{Reader.file_reading 1 Port_1}end %will read files 1->52
    thread{Reader.file_reading 2 Port_2}end %will read files 53->104
    thread{Reader.file_reading 3 Port_3}end %will read files 105->156
@@ -123,7 +100,14 @@ define
    end
    
 	 
-      
+   %prcedure for button
+   %Case of error:
+   %    If the last word typed in the GUI is not in the dictionary of the N diagram analysis then the
+   %    GUI will show in the second screen (the black screen) "Donald Trump doesn't use that word really often sorry"
+   %
+   %Normally:
+   %    If the last word is in  the dictionary of the N diagram analysis then the GUI will automatically put the
+   %    following word in the first screen with the previous text.   
    proc {AutomaticFill} Inserted ToInsert N L Prob Line Word PastWord in
 
       Inserted ={Text1 getText(p(1 0) 'end' $)} 
@@ -132,8 +116,6 @@ define
       Line = {String.tokens L 32}
       Word= {NewCell {List.last Line}}
       {FilterPunctuation Word}
-      
-      PastWord = {List.last Line} % this is so that we can keep the old form of the line with the punctaution
 
       Prob = {Algo.reachMostProb N_diagramme {String.toAtom @Word}}
       
@@ -146,7 +128,15 @@ define
 	 {Text1 tk(insert 'end' ToInsert)}
       end
    end
-   
+
+   %prcedure for button
+   %Case of error:
+   %    If the last word typed in the GUI is not in the dictionary of the N diagram analysis then the
+   %    GUI will show in the second screen (the black screen) "Donald Trump doesn't use that word really often sorry"
+   %
+   %Normally:
+   %    If the last word is in  the dictionary of the N diagram analysis then the GUI will recommend the word in the
+   %    second screen.
    proc{Recommend}
       Inserted ToInsert N L Prob Line Word PastWord in
       Inserted ={Text1 getText(p(1 0) 'end' $)}
@@ -155,8 +145,6 @@ define
       Line = {String.tokens L 32}
       Word= {NewCell {List.last Line}}
       {FilterPunctuation Word}
-      
-      PastWord = {List.last Line}
 
       Prob = {Algo.reachMostProb N_diagramme {String.toAtom @Word}}
       if Prob == nil then
@@ -167,6 +155,8 @@ define
       end
       
    end
+   %procedure for a button
+   %this is to exit the GUI
    proc{Exit}
       {Application.exit 0}
    end
@@ -177,6 +167,5 @@ define
    
    {Text1 bind(event:"<Control-s>" action:AutomaticFill)} % You can also bind events
 
-   {Show 'You can print in the terminal...'}
 
 end
